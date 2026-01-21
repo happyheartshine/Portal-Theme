@@ -18,7 +18,6 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
-import SidebarWidget from "./SidebarWidget";
 import type { NavItem } from "@/menu-items";
 
 const navItems: NavItem[] = [
@@ -58,36 +57,9 @@ const navItems: NavItem[] = [
   },
 ];
 
-const othersItems: NavItem[] = [
-  {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/line-chart",  },
-      { name: "Bar Chart", path: "/bar-chart",  },
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/alerts",  },
-      { name: "Avatar", path: "/avatars",  },
-      { name: "Badge", path: "/badge",  },
-      { name: "Buttons", path: "/buttons",  },
-      { name: "Images", path: "/images",  },
-      { name: "Videos", path: "/videos",  },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin",  },
-      { name: "Sign Up", path: "/signup",  },
-    ],
-  },
-];
+// Placeholder for "others" section items (customize as needed)
+const othersItems: NavItem[] = [];
+
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -112,7 +84,7 @@ const AppSidebar: React.FC = () => {
   ) => (
     <ul className="flex flex-col gap-4">
       {navItems.map((nav, index) => (
-        <li key={nav.name}>
+        <li key={nav.path || `${nav.name}-${menuType}-${index}`}>
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
@@ -186,8 +158,8 @@ const AppSidebar: React.FC = () => {
               }}
             >
               <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
+                {nav.subItems.map((subItem, subIndex) => (
+                  <li key={subItem.path || `${subItem.name}-${menuType}-${index}-${subIndex}`}>
                     <Link
                       href={subItem.path}
                       className={`menu-dropdown-item ${
@@ -358,7 +330,6 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );

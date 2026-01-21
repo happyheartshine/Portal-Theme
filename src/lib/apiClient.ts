@@ -83,9 +83,9 @@ api.interceptors.response.use(
             sessionStorage.removeItem('access_token');
             sessionStorage.removeItem('refresh_token');
             
-            // Redirect to login if we're in the browser
-            if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
-              window.location.href = '/login';
+            // Redirect to signin if we're in the browser
+            if (typeof window !== 'undefined' && window.location.pathname !== '/signin') {
+              window.location.href = '/signin';
             }
             
             return Promise.reject(error); // Return original error, not refresh error
@@ -95,9 +95,9 @@ api.interceptors.response.use(
           sessionStorage.removeItem('access_token');
           sessionStorage.removeItem('refresh_token');
           
-          // Redirect to login if we're in the browser
-          if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
-            window.location.href = '/login';
+          // Redirect to signin if we're in the browser
+          if (typeof window !== 'undefined' && window.location.pathname !== '/signin') {
+            window.location.href = '/signin';
           }
         }
       }

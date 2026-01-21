@@ -21,9 +21,9 @@ export function RouteGuard({ children, allowedRoles }: RouteGuardProps) {
 
   useEffect(() => {
     if (!loading) {
-      // Not authenticated - redirect to login
+      // Not authenticated - redirect to signin
       if (!user) {
-        router.push('/login');
+        router.push('/signin');
         return;
       }
 

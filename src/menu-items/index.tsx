@@ -6,14 +6,14 @@ import type { NavItem } from "./employee";
 
 /**
  * Get menu items based on user role
- * ADMIN gets all menus, MANAGER gets manager + employee, EMPLOYEE gets only employee
+ * ADMIN gets only admin menus, MANAGER gets only manager menus, EMPLOYEE gets only employee menus
  */
 export function getMenuItems(role?: string): NavItem[] {
   switch (role) {
     case "ADMIN":
-      return [...adminMenuItems, ...managerMenuItems, ...employeeMenuItems];
+      return adminMenuItems;
     case "MANAGER":
-      return [...managerMenuItems, ...employeeMenuItems];
+      return managerMenuItems;
     case "EMPLOYEE":
       return employeeMenuItems;
     default:

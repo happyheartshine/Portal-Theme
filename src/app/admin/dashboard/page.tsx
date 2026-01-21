@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { adminApi } from '@/lib/apiClient';
-import toast from '@/lib/toast';
-import ComponentCard from '@/components/common/ComponentCard';
-import Button from '@/components/ui/button/Button';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { adminApi } from "@/lib/apiClient";
+import toast from "@/lib/toast";
+import ComponentCard from "@/components/common/ComponentCard";
+import Button from "@/components/ui/button/Button";
+import Link from "next/link";
+import { formatINR, formatUSD } from "@/utils/currency";
 
 interface OrderAnalytics {
   totalOrders?: number;
@@ -156,7 +157,9 @@ export default function AdminDashboardPage() {
           </div>
           <h2 className="text-3xl font-bold mb-1">{refundAnalytics?.totalRefunds || 0}</h2>
           <p className="text-sm text-red-600 dark:text-red-400">
-            ${refundAnalytics?.totalAmount?.toFixed(2) || '0.00'}
+            {refundAnalytics?.totalAmount != null
+              ? formatUSD(refundAnalytics.totalAmount)
+              : formatUSD(0)}
           </p>
         </ComponentCard>
 
@@ -179,7 +182,9 @@ export default function AdminDashboardPage() {
             <div className="text-white text-2xl">💼</div>
           </div>
           <h2 className="text-3xl font-bold mb-1">
-            ${pendingSalary?.totalPending?.toFixed(2) || '0.00'}
+            {pendingSalary?.totalPending != null
+              ? formatINR(pendingSalary.totalPending)
+              : formatINR(0)}
           </h2>
           <p className="text-sm text-purple-100">
             {pendingSalary?.employeeCount || 0} employees
@@ -226,13 +231,17 @@ export default function AdminDashboardPage() {
               <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Total Amount</span>
                 <span className="font-bold text-lg text-blue-600">
-                  ${refundAnalytics.totalAmount?.toFixed(2) || '0.00'}
+                  {refundAnalytics.totalAmount != null
+                    ? formatUSD(refundAnalytics.totalAmount)
+                    : formatUSD(0)}
                 </span>
               </div>
               <div className="flex justify-between items-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Average Refund</span>
                 <span className="font-bold text-lg text-orange-600">
-                  ${refundAnalytics.averageAmount?.toFixed(2) || '0.00'}
+                  {refundAnalytics.averageAmount != null
+                    ? formatUSD(refundAnalytics.averageAmount)
+                    : formatUSD(0)}
                 </span>
               </div>
               {refundAnalytics.byStatus && (

@@ -24,7 +24,7 @@ export default function ManagerLayout({
     : "lg:ml-[90px]";
 
   return (
-    <RouteGuard allowedRoles={[ROLES.MANAGER, ROLES.ADMIN]}>
+    <RouteGuard allowedRoles={[ROLES.MANAGER]}>
       <MenuProvider>
         <div className="min-h-screen xl:flex">
           {/* Sidebar and Backdrop */}

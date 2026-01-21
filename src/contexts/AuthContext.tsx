@@ -127,8 +127,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Clear tokens from storage
     clearTokens();
     
-    // Redirect to login
-    router.push('/login');
+    // Redirect to signin page
+    router.push('/signin');
   };
 
   const value: AuthContextType = {
