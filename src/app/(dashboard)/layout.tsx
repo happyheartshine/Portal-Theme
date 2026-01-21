@@ -9,7 +9,7 @@ import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
 import { ROLES } from "@/lib/auth";
 
-export default function AdminLayout({
+export default function EmployeeLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export default function AdminLayout({
     : "lg:ml-[90px]";
 
   return (
-    <RouteGuard allowedRoles={[ROLES.ADMIN]}>
+    <RouteGuard allowedRoles={[ROLES.EMPLOYEE, ROLES.MANAGER, ROLES.ADMIN]}>
       <MenuProvider>
         <div className="min-h-screen xl:flex">
           {/* Sidebar and Backdrop */}
@@ -46,3 +46,4 @@ export default function AdminLayout({
     </RouteGuard>
   );
 }
+
