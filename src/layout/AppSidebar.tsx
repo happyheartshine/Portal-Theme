@@ -88,7 +88,7 @@ const AppSidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group  ${
+              className={`menu-item group ${
                 openSubmenu?.type === menuType && openSubmenu?.index === index
                   ? "menu-item-active"
                   : "menu-item-inactive"
@@ -96,7 +96,7 @@ const AppSidebar: React.FC = () => {
                 !isExpanded && !isHovered
                   ? "lg:justify-center"
                   : "lg:justify-start"
-              }`}
+              } transform hover:scale-[1.02] active:scale-[0.98]`}
             >
               <span
                 className={` ${
@@ -127,7 +127,7 @@ const AppSidebar: React.FC = () => {
                 href={nav.path}
                 className={`menu-item group ${
                   isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-                }`}
+                } transform hover:scale-[1.02] active:scale-[0.98]`}
               >
                 <span
                   className={`${
@@ -166,7 +166,7 @@ const AppSidebar: React.FC = () => {
                         isActive(subItem.path)
                           ? "menu-dropdown-item-active"
                           : "menu-dropdown-item-inactive"
-                      }`}
+                      } transform hover:scale-[1.01] active:scale-[0.99]`}
                     >
                       {subItem.name}
                     </Link>
