@@ -498,5 +498,62 @@ export class ManagementService {
     return deduction;
   }
 
+  /**
+   * Archive refund (move to ARCHIVED status)
+   * Manager-only, no team restrictions
+   */
+  async archiveRefund(managerId: string, refundId: string) {
+    const refund = await this.prisma.refundRequest.findUnique({
+      where: { id: refundId },
+    });
+
+    if (!refund) {
+      throw new NotFoundException('Refund request not found');
+    }
+
+    // Check if refund is already archived
+    if (refund.status === 'ARCHIVED') {
+      throw new BadRequestException('Refund is already archived');
+    }
+
+    // Check if fully refunded
+    const requestedAmount = Number(refund.amount);
+    const refundedAmount = Number(refund.refundedAmountUSD || 0);
+    const isFullyRefunded = refundedAmount >= requestedAmount;
+
+    // Only allow if status is DONE OR if fully refunded
+    if (refund.status !== 'DONE' && !isFullyRefunded) {
+      throw new BadRequestException(
+        `Cannot archive refund. Status: ${refund.status}, Refunded: ${refundedAmount} out of ${requestedAmount}. ` +
+          'Refund must be in DONE status or fully refunded to archive.',
+      );
+    }
+
+    const now = new Date();
+    const updatedRefund = await this.prisma.refundRequest.update({
+      where: { id: refundId },
+      data: {
+        status: 'ARCHIVED',
+        employeeConfirmedAt: now,
+        archivedAt: now,
+      },
+    });
+
+    // Audit log
+    await this.auditService.log({
+      action: 'refund_archived',
+      performedByUserId: managerId,
+      targetUserId: refund.requestedByUserId,
+      details: {
+        refundId: refund.id,
+        amount: refund.amount,
+        refundedAmountUSD: refund.refundedAmountUSD,
+        status: 'ARCHIVED',
+      },
+    });
+
+    return updatedRefund;
+  }
+
 }
 

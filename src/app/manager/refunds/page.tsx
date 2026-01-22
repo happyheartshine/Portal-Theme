@@ -187,8 +187,8 @@ function ManagerRefundsPageContent() {
     try {
       setProcessingId(processingRefund.id);
       await managerApi.processManagementRefund(processingRefund.id, {
-        amountUSD: amount,
-      } as { amountUSD: number });
+        refundedAmountUSD: amount,
+      } as { refundedAmountUSD: number });
       toast.success("Refund processed successfully");
       setProcessingRefund(null);
       setRefundedAmount("");
@@ -243,15 +243,15 @@ function ManagerRefundsPageContent() {
 
   const handleConfirmNotified = async (refundId: string) => {
     try {
-      await managerApi.confirmRefundNotified(refundId);
+      await managerApi.archiveManagementRefund(refundId);
       toast.success("Refund archived successfully");
       setShowConfirmModal(null);
       if (activeTab === "done") {
         fetchRefunds("DONE");
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to confirm");
-      console.error("Confirm error:", error);
+      toast.error(error.response?.data?.message || "Failed to archive refund");
+      console.error("Archive error:", error);
     }
   };
 

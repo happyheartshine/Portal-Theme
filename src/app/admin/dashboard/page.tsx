@@ -7,6 +7,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import Button from "@/components/ui/button/Button";
 import Link from "next/link";
 import { formatINR, formatUSD } from "@/utils/currency";
+import { BoxCubeIcon, FileIcon, DollarLineIcon, FolderIcon, GroupIcon, TrashBinIcon, ArrowRightIcon } from "@/icons";
 
 interface OrderAnalytics {
   totalOrders?: number;
@@ -97,8 +98,8 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-gray-500 mt-2">System overview and analytics</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">Admin Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">System overview and analytics</p>
         </div>
         <div className="flex min-h-[400px] items-center justify-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
@@ -111,8 +112,8 @@ export default function AdminDashboardPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-gray-500 mt-2">System overview and analytics</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">Admin Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">System overview and analytics</p>
         </div>
         
         <div className="flex gap-3">
@@ -141,9 +142,9 @@ export default function AdminDashboardPage() {
         <ComponentCard title="Total Orders" className="p-6">
           <div className="flex items-center justify-between mb-3">
             <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h5>
-            <div className="text-primary-500 text-2xl">🛒</div>
+            <BoxCubeIcon className="w-8 h-8 text-primary-500 dark:text-primary-400" />
           </div>
-          <h2 className="text-3xl font-bold mb-1">{orderAnalytics?.totalOrders || 0}</h2>
+          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{orderAnalytics?.totalOrders || 0}</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {orderAnalytics?.approvedOrders || 0} approved
           </p>
@@ -153,9 +154,9 @@ export default function AdminDashboardPage() {
         <ComponentCard title="Total Refunds" className="p-6">
           <div className="flex items-center justify-between mb-3">
             <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Refunds</h5>
-            <div className="text-warning-500 text-2xl">🧾</div>
+            <FileIcon className="w-8 h-8 text-warning-500 dark:text-warning-400" />
           </div>
-          <h2 className="text-3xl font-bold mb-1">{refundAnalytics?.totalRefunds || 0}</h2>
+          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{refundAnalytics?.totalRefunds || 0}</h2>
           <p className="text-sm text-red-600 dark:text-red-400">
             {refundAnalytics?.totalAmount != null
               ? formatUSD(refundAnalytics.totalAmount)
@@ -167,28 +168,30 @@ export default function AdminDashboardPage() {
         <ComponentCard title="Credits" className="p-6">
           <div className="flex items-center justify-between mb-3">
             <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Credits</h5>
-            <div className="text-success-500 text-2xl">💰</div>
+            <DollarLineIcon className="w-8 h-8 text-success-500 dark:text-success-400" />
           </div>
-          <h2 className="text-3xl font-bold mb-1">{creditAnalytics?.totalCredits || 0}</h2>
+          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{creditAnalytics?.totalCredits || 0}</h2>
           <p className="text-sm text-success-600 dark:text-success-400">
             ${creditAnalytics?.totalAmount?.toFixed(2) || '0.00'}
           </p>
         </ComponentCard>
 
         {/* Pending Salary */}
-        <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-purple-500 to-purple-600 dark:border-gray-800 p-6 text-white shadow">
+        <div className="rounded-2xl border-2 border-purple-400 dark:border-purple-500 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 p-6 text-white shadow-lg">
           <div className="flex items-center justify-between mb-3">
-            <h5 className="text-sm font-medium text-purple-100">Pending Salary</h5>
-            <div className="text-white text-2xl">💼</div>
+            <h5 className="text-sm font-semibold text-purple-50 uppercase tracking-wide">Pending Salary</h5>
+            <FolderIcon className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold mb-1">
+          <h2 className="text-3xl font-bold mb-2 text-white">
             {pendingSalary?.totalPending != null
               ? formatINR(pendingSalary.totalPending)
               : formatINR(0)}
           </h2>
-          <p className="text-sm text-purple-100">
-            {pendingSalary?.employeeCount || 0} employees
-          </p>
+          <div className="mt-3 pt-3 border-t border-purple-400 dark:border-purple-500">
+            <p className="text-sm font-medium text-purple-50">
+              <span className="text-lg font-bold">{pendingSalary?.employeeCount || 0}</span> employees
+            </p>
+          </div>
         </div>
       </div>
 
@@ -200,23 +203,23 @@ export default function AdminDashboardPage() {
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Total Orders</span>
-                <span className="font-bold text-lg">{orderAnalytics.totalOrders || 0}</span>
+                <span className="font-bold text-lg text-gray-800 dark:text-white/90">{orderAnalytics.totalOrders || 0}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Approved</span>
-                <span className="font-bold text-lg text-green-600">{orderAnalytics.approvedOrders || 0}</span>
+                <span className="font-bold text-lg text-green-600 dark:text-green-400">{orderAnalytics.approvedOrders || 0}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Pending</span>
-                <span className="font-bold text-lg text-yellow-600">{orderAnalytics.pendingOrders || 0}</span>
+                <span className="font-bold text-lg text-yellow-600 dark:text-yellow-400">{orderAnalytics.pendingOrders || 0}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Rejected</span>
-                <span className="font-bold text-lg text-red-600">{orderAnalytics.rejectedOrders || 0}</span>
+                <span className="font-bold text-lg text-red-600 dark:text-red-400">{orderAnalytics.rejectedOrders || 0}</span>
               </div>
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">No order data available</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-8">No order data available</p>
           )}
         </ComponentCard>
 
@@ -226,11 +229,11 @@ export default function AdminDashboardPage() {
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Total Refunds</span>
-                <span className="font-bold text-lg">{refundAnalytics.totalRefunds || 0}</span>
+                <span className="font-bold text-lg text-gray-800 dark:text-white/90">{refundAnalytics.totalRefunds || 0}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Total Amount</span>
-                <span className="font-bold text-lg text-blue-600">
+                <span className="font-bold text-lg text-blue-600 dark:text-blue-400">
                   {refundAnalytics.totalAmount != null
                     ? formatUSD(refundAnalytics.totalAmount)
                     : formatUSD(0)}
@@ -238,7 +241,7 @@ export default function AdminDashboardPage() {
               </div>
               <div className="flex justify-between items-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded">
                 <span className="text-gray-600 dark:text-gray-300">Average Refund</span>
-                <span className="font-bold text-lg text-orange-600">
+                <span className="font-bold text-lg text-orange-600 dark:text-orange-400">
                   {refundAnalytics.averageAmount != null
                     ? formatUSD(refundAnalytics.averageAmount)
                     : formatUSD(0)}
@@ -249,14 +252,14 @@ export default function AdminDashboardPage() {
                   {Object.entries(refundAnalytics.byStatus).map(([status, count]) => (
                     <div key={status} className="flex justify-between items-center text-sm">
                       <span className="text-gray-600 dark:text-gray-400 capitalize">{status}</span>
-                      <span className="font-medium">{count}</span>
+                      <span className="font-medium text-gray-800 dark:text-white/90">{count}</span>
                     </div>
                   ))}
                 </div>
               )}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">No refund data available</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-8">No refund data available</p>
           )}
         </ComponentCard>
       </div>
@@ -268,9 +271,9 @@ export default function AdminDashboardPage() {
             href="/admin/users"
             className="flex items-center gap-3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
-            <div className="text-primary-500 text-2xl">👥</div>
+            <GroupIcon className="w-6 h-6 text-primary-500 dark:text-primary-400" />
             <div>
-              <div className="font-medium">Manage Users</div>
+              <div className="font-medium text-gray-800 dark:text-white/90">Manage Users</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">Create and manage accounts</div>
             </div>
           </Link>
@@ -279,9 +282,9 @@ export default function AdminDashboardPage() {
             href="/admin/purge"
             className="flex items-center gap-3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
-            <div className="text-red-500 text-2xl">🗑️</div>
+            <TrashBinIcon className="w-6 h-6 text-red-500 dark:text-red-400" />
             <div>
-              <div className="font-medium">Data Purge</div>
+              <div className="font-medium text-gray-800 dark:text-white/90">Data Purge</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">Clean up old records</div>
             </div>
           </Link>
@@ -290,9 +293,9 @@ export default function AdminDashboardPage() {
             onClick={fetchAllAnalytics}
             className="flex items-center gap-3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left"
           >
-            <div className="text-success-500 text-2xl">🔄</div>
+            <ArrowRightIcon className="w-6 h-6 text-success-500 dark:text-success-400 group-hover:rotate-90 transition-transform" />
             <div>
-              <div className="font-medium">Refresh Data</div>
+              <div className="font-medium text-gray-800 dark:text-white/90">Refresh Data</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">Update analytics</div>
             </div>
           </button>

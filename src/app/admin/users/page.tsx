@@ -9,6 +9,7 @@ import { Modal } from '@/components/ui/modal';
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
 import Select from '@/components/form/Select';
+import { GroupIcon, TrashBinIcon } from '@/icons';
 
 interface User {
   id: string;
@@ -16,6 +17,7 @@ interface User {
   email: string;
   role: 'EMPLOYEE' | 'MANAGER' | 'ADMIN';
   ratePerOrder?: number | null;
+  isActive?: boolean;
   createdAt?: string;
 }
 
@@ -117,12 +119,16 @@ export default function AdminUsersPage() {
 
     try {
       setDeletingId(userId);
-      await adminApi.deleteUser(userId);
-      toast.success('User deleted successfully');
-      fetchUsers();
+      const response = await adminApi.deleteUser(userId);
+      console.log('Delete user response:', response);
+      toast.success(response.data?.message || 'User deleted successfully');
+      // Refresh users list after successful deletion
+      await fetchUsers();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to delete user');
       console.error('Delete user error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error data:', error.response?.data);
+      toast.error(error.response?.data?.message || error.message || 'Failed to delete user');
     } finally {
       setDeletingId(null);
     }
@@ -145,7 +151,7 @@ export default function AdminUsersPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">User Management</h1>
           <p className="text-gray-500 mt-2 dark:text-gray-400">Manage users, roles, and permissions</p>
         </div>
         <div className="flex min-h-[400px] items-center justify-center">
@@ -159,7 +165,7 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">User Management</h1>
           <p className="text-gray-500 mt-2 dark:text-gray-400">Manage users, roles, and permissions</p>
         </div>
         
@@ -196,7 +202,7 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {users.map((user) => (
+              {users.filter(user => user.isActive !== false).map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -234,12 +240,12 @@ export default function AdminUsersPage() {
                     <button
                       onClick={() => handleDeleteUser(user.id, user.name)}
                       disabled={deletingId === user.id}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {deletingId === user.id ? (
                         <span className="animate-spin">⏳</span>
                       ) : (
-                        '🗑️'
+                        <TrashBinIcon className="w-5 h-5" />
                       )}
                     </button>
                   </td>
@@ -251,7 +257,7 @@ export default function AdminUsersPage() {
         
         {users.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-gray-400 text-5xl mb-3">👥</div>
+            <GroupIcon className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-3" />
             <p className="text-gray-600 dark:text-gray-400">No users found</p>
           </div>
         )}
@@ -265,7 +271,7 @@ export default function AdminUsersPage() {
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Create New User</h2>
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white/90">Create New User</h2>
           </div>
 
           <form onSubmit={handleCreateUser} className="space-y-4">

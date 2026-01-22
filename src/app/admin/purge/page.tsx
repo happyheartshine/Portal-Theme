@@ -59,7 +59,7 @@ export default function AdminPurgePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Data Purge</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">Data Purge</h1>
         <p className="text-gray-500 mt-2 dark:text-gray-400">Clean up old data and manage system storage</p>
       </div>
 
@@ -113,7 +113,7 @@ export default function AdminPurgePage() {
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   All records from{' '}
-                  <strong>
+                  <strong className="text-gray-900 dark:text-white/90">
                     {new Date(selectedMonth + '-01').toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long'
@@ -124,7 +124,7 @@ export default function AdminPurgePage() {
 
               <div>
                 <Label>
-                  Type <strong className="text-red-600">PURGE</strong> to confirm <span className="text-red-500">*</span>
+                  Type <strong className="text-red-600 dark:text-red-400">PURGE</strong> to confirm <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   type="text"
@@ -153,7 +153,21 @@ export default function AdminPurgePage() {
                     </>
                   ) : (
                     <>
-                      <span className="mr-2">🗑️</span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="mr-2 text-white"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M6.54142 3.7915C6.54142 2.54886 7.54878 1.5415 8.79142 1.5415H11.2081C12.4507 1.5415 13.4581 2.54886 13.4581 3.7915V4.0415H15.6252H16.666C17.0802 4.0415 17.416 4.37729 17.416 4.7915C17.416 5.20572 17.0802 5.5415 16.666 5.5415H16.3752V8.24638V13.2464V16.2082C16.3752 17.4508 15.3678 18.4582 14.1252 18.4582H5.87516C4.63252 18.4582 3.62516 17.4508 3.62516 16.2082V13.2464V8.24638V5.5415H3.3335C2.91928 5.5415 2.5835 5.20572 2.5835 4.7915C2.5835 4.37729 2.91928 4.0415 3.3335 4.0415H4.37516H6.54142V3.7915ZM14.8752 13.2464V8.24638V5.5415H13.4581H12.7081H7.29142H6.54142H5.12516V8.24638V13.2464V16.2082C5.12516 16.6224 5.46095 16.9582 5.87516 16.9582H14.1252C14.5394 16.9582 14.8752 16.6224 14.8752 16.2082V13.2464ZM8.04142 4.0415H11.9581V3.7915C11.9581 3.37729 11.6223 3.0415 11.2081 3.0415H8.79142C8.37721 3.0415 8.04142 3.37729 8.04142 3.7915V4.0415ZM8.3335 7.99984C8.74771 7.99984 9.0835 8.33562 9.0835 8.74984V13.7498C9.0835 14.1641 8.74771 14.4998 8.3335 14.4998C7.91928 14.4998 7.5835 14.1641 7.5835 13.7498V8.74984C7.5835 8.33562 7.91928 7.99984 8.3335 7.99984ZM12.4168 8.74984C12.4168 8.33562 12.081 7.99984 11.6668 7.99984C11.2526 7.99984 10.9168 8.33562 10.9168 8.74984V13.7498C10.9168 14.1641 11.2526 14.4998 11.6668 14.4998C12.081 14.4998 12.4168 14.1641 12.4168 13.7498V8.74984Z"
+                          fill="currentColor"
+                        />
+                      </svg>
                       <span>Purge Data</span>
                     </>
                   )}
@@ -182,12 +196,12 @@ export default function AdminPurgePage() {
         <div className="flex items-start gap-3">
           <div className="text-blue-600 text-2xl">ℹ️</div>
           <div className="text-sm text-gray-700 dark:text-gray-300">
-            <h4 className="font-semibold mb-2">When to use Data Purge?</h4>
+            <h4 className="font-semibold mb-2 text-gray-800 dark:text-white/90">When to use Data Purge?</h4>
             <ul className="list-disc list-inside space-y-1">
-              <li>To comply with data retention policies</li>
-              <li>To free up database storage space</li>
-              <li>To remove old records that are no longer needed</li>
-              <li>After archiving data to external storage</li>
+              <li className="text-gray-700 dark:text-gray-300">To comply with data retention policies</li>
+              <li className="text-gray-700 dark:text-gray-300">To free up database storage space</li>
+              <li className="text-gray-700 dark:text-gray-300">To remove old records that are no longer needed</li>
+              <li className="text-gray-700 dark:text-gray-300">After archiving data to external storage</li>
             </ul>
             <p className="mt-3 font-semibold text-blue-700 dark:text-blue-400">
               Best Practice: Always create a backup before purging data!
@@ -202,37 +216,37 @@ export default function AdminPurgePage() {
           <div className="flex items-start gap-2">
             <span className="text-green-500 mt-0.5">✓</span>
             <p>
-              <strong>Do:</strong> Verify all required reports have been generated before purging
+              <strong className="text-gray-800 dark:text-white/90">Do:</strong> Verify all required reports have been generated before purging
             </p>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-green-500 mt-0.5">✓</span>
             <p>
-              <strong>Do:</strong> Create a database backup before performing purge operations
+              <strong className="text-gray-800 dark:text-white/90">Do:</strong> Create a database backup before performing purge operations
             </p>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-green-500 mt-0.5">✓</span>
             <p>
-              <strong>Do:</strong> Notify relevant stakeholders before purging data
+              <strong className="text-gray-800 dark:text-white/90">Do:</strong> Notify relevant stakeholders before purging data
             </p>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-red-500 mt-0.5">✗</span>
             <p>
-              <strong>Don't:</strong> Purge data from the current or previous month
+              <strong className="text-gray-800 dark:text-white/90">Don't:</strong> Purge data from the current or previous month
             </p>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-red-500 mt-0.5">✗</span>
             <p>
-              <strong>Don't:</strong> Purge data without proper authorization
+              <strong className="text-gray-800 dark:text-white/90">Don't:</strong> Purge data without proper authorization
             </p>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-red-500 mt-0.5">✗</span>
             <p>
-              <strong>Don't:</strong> Rush the purge process - double-check everything first
+              <strong className="text-gray-800 dark:text-white/90">Don't:</strong> Rush the purge process - double-check everything first
             </p>
           </div>
         </div>

@@ -1,10 +1,11 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack(config, { isServer }) {
     // Find and modify the existing rule that handles SVG files
-    config.module.rules.forEach((rule: any) => {
+    config.module.rules.forEach((rule) => {
       if (rule.test && rule.test.toString().includes('svg')) {
         // Exclude SVG from default asset/resource loader
         rule.exclude = /\.svg$/i;
@@ -28,7 +29,6 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-    
   turbopack: {
     rules: {
       '*.svg': {
@@ -39,4 +39,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
+  

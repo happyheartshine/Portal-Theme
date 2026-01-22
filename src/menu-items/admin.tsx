@@ -2,20 +2,20 @@ import React from "react";
 import { GridIcon, GroupIcon, TrashBinIcon } from "@/icons";
 import type { NavItem } from "./employee";
 
-// Admin menu items
+// Admin menu items - using React.createElement to avoid serialization issues
 export const adminMenuItems: NavItem[] = [
   {
-    icon: <GridIcon />,
+    icon: React.createElement(GridIcon),
     name: "Dashboard",
     path: "/admin/dashboard",
   },
   {
-    icon: <GroupIcon />,
+    icon: React.createElement(GroupIcon),
     name: "User Management",
     path: "/admin/users",
   },
   {
-    icon: <TrashBinIcon />,
+    icon: React.createElement(TrashBinIcon),
     name: "Data Purge",
     path: "/admin/purge",
   },

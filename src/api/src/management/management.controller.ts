@@ -206,5 +206,24 @@ export class ManagementController {
   ) {
     return this.managementService.createDeduction(user.userId, dto);
   }
+
+  @Post('refunds/:refundId/archive')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Archive refund (move to ARCHIVED status)' })
+  @ApiParam({ name: 'refundId', description: 'Refund request ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Refund archived successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Invalid request (e.g., not in DONE status)' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Manager only' })
+  @ApiResponse({ status: 404, description: 'Refund request not found' })
+  async archiveRefund(
+    @CurrentUser() user: any,
+    @Param('refundId') refundId: string,
+  ) {
+    return this.managementService.archiveRefund(user.userId, refundId);
+  }
 }
 

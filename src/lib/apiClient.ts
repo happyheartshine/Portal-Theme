@@ -251,9 +251,10 @@ export const managerApi = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
   processRefund: (id: string) => api.post(`/manager/refunds/${id}/process`),
-  processManagementRefund: (refundId: string, data: { amountUSD: number }) => 
+  processManagementRefund: (refundId: string, data: { refundedAmountUSD: number }) => 
     api.post(`/management/refunds/${refundId}/process`, data),
   confirmRefundNotified: (id: string) => api.post(`/refunds/${id}/confirm-notified`),
+  archiveManagementRefund: (refundId: string) => api.post(`/management/refunds/${refundId}/archive`),
 
   // Warnings
   issueWarning: (data: { userId: string; message: string }) => api.post('/manager/warnings', data),
