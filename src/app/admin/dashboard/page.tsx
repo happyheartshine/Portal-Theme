@@ -8,6 +8,7 @@ import Button from "@/components/ui/button/Button";
 import Link from "next/link";
 import { formatINR, formatUSD } from "@/utils/currency";
 import { BoxCubeIcon, FileIcon, DollarLineIcon, FolderIcon, GroupIcon, TrashBinIcon, ArrowRightIcon } from "@/icons";
+import SkeletonLoader from "@/components/common/SkeletonLoader";
 
 interface OrderAnalytics {
   totalOrders?: number;
@@ -58,30 +59,27 @@ export default function AdminDashboardPage() {
       };
       const numericRange = rangeMap[selectedRange] || 7;
       
+      // Load data in parallel but don't block page render
       const [orders, refunds, credits, salary] = await Promise.all([
         adminApi.getOrderAnalytics(numericRange.toString()).catch(err => {
           console.error('Order analytics error:', err);
-          console.error('Error response:', err.response?.data);
-          console.error('Request params:', { range: numericRange });
           return { data: null };
         }),
         adminApi.getRefundAnalytics(selectedMonth, false).catch(err => {
           console.error('Refund analytics error:', err);
-          console.error('Error response:', err.response?.data);
           return { data: null };
         }),
         adminApi.getCreditAnalytics(selectedMonth).catch(err => {
           console.error('Credit analytics error:', err);
-          console.error('Error response:', err.response?.data);
           return { data: null };
         }),
         adminApi.getPendingSalary(selectedMonth).catch(err => {
           console.error('Pending salary error:', err);
-          console.error('Error response:', err.response?.data);
           return { data: null };
         })
       ]);
       
+      // Update state as data arrives
       setOrderAnalytics(orders.data);
       setRefundAnalytics(refunds.data);
       setCreditAnalytics(credits.data);
@@ -93,20 +91,6 @@ export default function AdminDashboardPage() {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">Admin Dashboard</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">System overview and analytics</p>
-        </div>
-        <div className="flex min-h-[400px] items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
@@ -140,58 +124,94 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {/* Total Orders */}
         <ComponentCard title="Total Orders" className="p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h5>
-            <BoxCubeIcon className="w-8 h-8 text-primary-500 dark:text-primary-400" />
-          </div>
-          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{orderAnalytics?.totalOrders || 0}</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {orderAnalytics?.approvedOrders || 0} approved
-          </p>
+          {loading && !orderAnalytics ? (
+            <div className="space-y-3">
+              <SkeletonLoader variant="rectangular" height={32} />
+              <SkeletonLoader variant="rectangular" height={24} width="60%" />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h5>
+                <BoxCubeIcon className="w-8 h-8 text-primary-500 dark:text-primary-400" />
+              </div>
+              <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{orderAnalytics?.totalOrders || 0}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {orderAnalytics?.approvedOrders || 0} approved
+              </p>
+            </>
+          )}
         </ComponentCard>
 
         {/* Total Refunds */}
         <ComponentCard title="Total Refunds" className="p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Refunds</h5>
-            <FileIcon className="w-8 h-8 text-warning-500 dark:text-warning-400" />
-          </div>
-          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{refundAnalytics?.totalRefunds || 0}</h2>
-          <p className="text-sm text-red-600 dark:text-red-400">
-            {refundAnalytics?.totalAmount != null
-              ? formatUSD(refundAnalytics.totalAmount)
-              : formatUSD(0)}
-          </p>
+          {loading && !refundAnalytics ? (
+            <div className="space-y-3">
+              <SkeletonLoader variant="rectangular" height={32} />
+              <SkeletonLoader variant="rectangular" height={24} width="60%" />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Refunds</h5>
+                <FileIcon className="w-8 h-8 text-warning-500 dark:text-warning-400" />
+              </div>
+              <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{refundAnalytics?.totalRefunds || 0}</h2>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {refundAnalytics?.totalAmount != null
+                  ? formatUSD(refundAnalytics.totalAmount)
+                  : formatUSD(0)}
+              </p>
+            </>
+          )}
         </ComponentCard>
 
         {/* Credits Generated */}
         <ComponentCard title="Credits" className="p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Credits</h5>
-            <DollarLineIcon className="w-8 h-8 text-success-500 dark:text-success-400" />
-          </div>
-          <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{creditAnalytics?.totalCredits || 0}</h2>
-          <p className="text-sm text-success-600 dark:text-success-400">
-            ${creditAnalytics?.totalAmount?.toFixed(2) || '0.00'}
-          </p>
+          {loading && !creditAnalytics ? (
+            <div className="space-y-3">
+              <SkeletonLoader variant="rectangular" height={32} />
+              <SkeletonLoader variant="rectangular" height={24} width="60%" />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Credits</h5>
+                <DollarLineIcon className="w-8 h-8 text-success-500 dark:text-success-400" />
+              </div>
+              <h2 className="text-3xl font-bold mb-1 text-gray-800 dark:text-white/90">{creditAnalytics?.totalCredits || 0}</h2>
+              <p className="text-sm text-success-600 dark:text-success-400">
+                ${creditAnalytics?.totalAmount?.toFixed(2) || '0.00'}
+              </p>
+            </>
+          )}
         </ComponentCard>
 
         {/* Pending Salary */}
         <div className="rounded-2xl border-2 border-purple-400 dark:border-purple-500 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="text-sm font-semibold text-purple-50 uppercase tracking-wide">Pending Salary</h5>
-            <FolderIcon className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-3xl font-bold mb-2 text-white">
-            {pendingSalary?.totalPending != null
-              ? formatINR(pendingSalary.totalPending)
-              : formatINR(0)}
-          </h2>
-          <div className="mt-3 pt-3 border-t border-purple-400 dark:border-purple-500">
-            <p className="text-sm font-medium text-purple-50">
-              <span className="text-lg font-bold">{pendingSalary?.employeeCount || 0}</span> employees
-            </p>
-          </div>
+          {loading && !pendingSalary ? (
+            <div className="space-y-3">
+              <SkeletonLoader variant="rectangular" height={32} className="bg-purple-400/50" />
+              <SkeletonLoader variant="rectangular" height={24} width="60%" className="bg-purple-400/50" />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="text-sm font-semibold text-purple-50 uppercase tracking-wide">Pending Salary</h5>
+                <FolderIcon className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold mb-2 text-white">
+                {pendingSalary?.totalPending != null
+                  ? formatINR(pendingSalary.totalPending)
+                  : formatINR(0)}
+              </h2>
+              <div className="mt-3 pt-3 border-t border-purple-400 dark:border-purple-500">
+                <p className="text-sm font-medium text-purple-50">
+                  <span className="text-lg font-bold">{pendingSalary?.employeeCount || 0}</span> employees
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
